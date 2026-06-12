@@ -9,8 +9,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(
     air-alarm-service
     src/main.cpp
-    src/app/Application.cpp
-    src/config/Config.cpp
+    src/app/application.cpp
+    src/config/config.cpp
 )
 
 target_include_directories(air-alarm-service
