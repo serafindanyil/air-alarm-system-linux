@@ -3,7 +3,9 @@
         "url": "https://ubilling.net.ua/aerialalerts",
         "poll_interval_seconds": 30
     },
-    "region": "Львівська область",
+    "region": {
+        "name": "Львівська область"
+    },
     "led": {
         "gpio_pin": 17,
         "active_alarm_blink_interval_hz": 2,
