@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Air Alarm Service",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/service/build/air-alarm-service",
+      "cwd": "${workspaceFolder}/service",
+      "args": [],
+      "stopAtEntry": false,
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb"
+    }
+  ]
+}
