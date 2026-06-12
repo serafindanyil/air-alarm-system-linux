@@ -4,11 +4,9 @@
 
 class Application {
 public:
-    Application();
-
     int run();
     void stop();
 
 private:
-    std::atomic<bool> running_;
+    std::atomic<bool> running_{true};
 };
