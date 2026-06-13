@@ -5,7 +5,7 @@
       "name": "Debug Air Alarm Service",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/service/build/air-alarm-service",
+      "program": "${workspaceFolder}/build/air-alarm-service",
       "cwd": "${workspaceFolder}/service",
       "args": [],
       "stopAtEntry": false,
