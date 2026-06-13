@@ -1,4 +1,5 @@
 #include "app/application.hpp"
+#include "config/config.hpp"
 
 #include <csignal>
 
@@ -11,7 +12,9 @@ void signal_handler(int) {
 }
 
 int main() {
-    Application application;
+    Config config = ConfigLoader::load("config/air_alarm_config.json");
+
+    Application application(config);
 
     global_application = &application;
 
