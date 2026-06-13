@@ -26,4 +26,7 @@ struct Config {
 class ConfigLoader {
 public:
     static Config load(const std::string& pathname);
+
+private:
+    static void validate(const Config& config);
 };
