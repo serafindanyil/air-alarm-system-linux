@@ -1,5 +1,6 @@
 #include "app/application.hpp"
 #include "config/config.hpp"
+#include "region_list/region_list.hpp"
 
 #include <csignal>
 
@@ -14,7 +15,9 @@ void signal_handler(int) {
 int main() {
     Config config = ConfigLoader::load("config/air_alarm_config.json");
 
-    Application application(config);
+    RegionList region_list = RegionListLoader::load("config/regions_adjacency_list.json");
+
+    Application application(config, region_list);
 
     global_application = &application;
 
