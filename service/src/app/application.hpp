@@ -1,19 +1,18 @@
 #pragma once
 
+#include "api/api.hpp"
 #include "config/config.hpp"
-#include "region_list/region_list.hpp"
 
 #include <atomic>
 
 class Application {
 public:
-    explicit Application(const Config& config, const RegionList& region_list, int region_id);
+    explicit Application(const Config& config, const Api& api);
     int run();
     void stop();
 
 private:
     Config config_;
-    RegionList region_list_;
-    int region_id_;
+    Api api_;
     std::atomic<bool> running_{true};
 };
