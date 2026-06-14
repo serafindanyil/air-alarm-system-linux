@@ -1,3 +1,4 @@
+#include "api/api.hpp"
 #include "app/application.hpp"
 #include "config/config.hpp"
 #include "region_list/region_list.hpp"
@@ -19,7 +20,9 @@ int main() {
 
     const int region_id = RegionListLoader::getRegionId(region_list, config.region.name);
 
-    Application application(config, region_list, region_id);
+    Api api = Api(config.api.url, region_id, region_list);
+
+    Application application(config, api);
 
     global_application = &application;
 

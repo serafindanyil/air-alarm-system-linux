@@ -7,18 +7,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(nlohmann_json 3 REQUIRED)
+find_package(cpr REQUIRED)
 
 add_executable(
     air-alarm-service
     src/main.cpp
     src/app/application.cpp
     src/config/config.cpp
+    src/region_list/region_list.cpp
+    src/api/api.cpp
 )
 
 target_link_libraries(
     air-alarm-service
     PRIVATE
         nlohmann_json::nlohmann_json
+        cpr::cpr
 )
 
 target_include_directories(
