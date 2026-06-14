@@ -13,6 +13,12 @@ class RegionListLoader {
 public:
     static RegionList load(const std::string& pathname);
 
+    static bool containsRegion(const RegionList& list, const std::string& regionName);
+
+    static int getRegionId(const RegionList& list, const std::string& regionName);
+
+    static std::vector<int> getAdjacentRegionIds(const RegionList& list, int region_id);
+
 private:
     static void validate(const RegionList& list);
 };
