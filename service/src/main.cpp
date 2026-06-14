@@ -17,7 +17,9 @@ int main() {
 
     RegionList region_list = RegionListLoader::load("config/regions_adjacency_list.json");
 
-    Application application(config, region_list);
+    const int region_id = RegionListLoader::getRegionId(region_list, config.region.name);
+
+    Application application(config, region_list, region_id);
 
     global_application = &application;
 
