@@ -20,21 +20,27 @@ Config ConfigLoader::load(const std::string& pathname) {
 
     Config config;
 
-    config.api.url = json.at("api").at("url").get<std::string>();
-    config.api.poll_interval_seconds = json.at("api").at("poll_interval_seconds").get<int>();
+    const auto& api = json.at("api");
+    const auto& region = json.at("region");
+    const auto& led = json.at("led");
 
-    config.region.name = json.at("region").at("name").get<std::string>();
+    config.api.url = api.at("url").get<std::string>();
+    config.api.poll_interval_seconds = api.at("poll_interval_seconds").get<int>();
 
-    config.led.gpio_pin = json.at("led").at("gpio_pin").get<int>();
-    config.led.active_alarm_blink_hz = json.at("led").at("active_alarm_blink_hz").get<double>();
-    config.led.neighbor_alarm_blink_hz = json.at("led").at("neighbor_alarm_blink_hz").get<double>();
+    config.region.name = region.at("name").get<std::string>();
 
+    config.led.gpio_pin = led.at("gpio_pin").get<int>();
+    config.led.active_alarm_blink_hz = led.at("active_alarm_blink_hz").get<double>();
+    config.led.neighbor_alarm_blink_hz = led.at("neighbor_alarm_blink_hz").get<double>();
+
+    validate(config);
+
+    return config;
+}
+
+void ConfigLoader::validate(const Config& config) {
     if (config.api.url.empty()) {
         throw std::runtime_error("API URL is empty");
-    }
-
-    if (!config.api.url.starts_with("https://")) {
-        throw std::runtime_error("Invalid API URL");
     }
 
     if (config.api.poll_interval_seconds <= 0) {
@@ -45,7 +51,7 @@ Config ConfigLoader::load(const std::string& pathname) {
         throw std::runtime_error("Region must not be empty");
     }
 
-    if (config.led.gpio_pin <= 0) {
+    if (config.led.gpio_pin < 0) {
         throw std::runtime_error("Invalid GPIO");
     }
 
@@ -55,6 +61,4 @@ Config ConfigLoader::load(const std::string& pathname) {
     if (config.led.neighbor_alarm_blink_hz <= 0) {
         throw std::runtime_error("Neighbor alarm blink frequency must be positive");
     }
-
-    return config;
 }
