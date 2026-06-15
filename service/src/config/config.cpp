@@ -30,6 +30,7 @@ Config ConfigLoader::load(const std::string& pathname) {
     config.region.name = region.at("name").get<std::string>();
 
     config.led.gpio_pin = led.at("gpio_pin").get<int>();
+    config.led.gpio_chip_path = led.at("gpio_chip_path").get<std::string>();
     config.led.active_alarm_blink_hz = led.at("active_alarm_blink_hz").get<double>();
     config.led.neighbor_alarm_blink_hz = led.at("neighbor_alarm_blink_hz").get<double>();
 
@@ -53,6 +54,10 @@ void ConfigLoader::validate(const Config& config) {
 
     if (config.led.gpio_pin < 0) {
         throw std::runtime_error("Invalid GPIO");
+    }
+
+    if (config.led.gpio_chip_path.empty()) {
+        throw std::runtime_error("GPIO chip path is empty");
     }
 
     if (config.led.active_alarm_blink_hz <= 0) {
