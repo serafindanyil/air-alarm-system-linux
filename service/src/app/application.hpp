@@ -6,16 +6,34 @@
 
 #include <atomic>
 
+enum class AppState {
+    STARTING,
+    NO_INTERNET,
+    BROKEN_API,
+    NO_ALERT,
+    ALERT_CURRENT_REGION,
+    ALERT_NEIGHBORING_REGIONS,
+    RUNTIME_ERROR,
+    STOPPING,
+};
+
 class Application {
 public:
-    explicit Application(const Config& config, LedController& led_controller, Api& api);
+    explicit Application(Config& config, LedController& led_controller, Api& api);
 
     int run();
     void stop();
 
 private:
-    Config config_;
+    Config& config_;
     LedController& led_controller_;
     Api& api_;
+
+    AppState state_{AppState::STARTING};
+    AppState evaluateState();
+
+    void applyState(AppState state);
+    void changeState(AppState next_state);
+
     std::atomic<bool> running_{true};
 };
