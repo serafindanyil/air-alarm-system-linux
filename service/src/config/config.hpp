@@ -13,6 +13,7 @@ struct RegionConfig {
 
 struct LedConfig {
     int gpio_pin;
+    std::string gpio_chip_path;
     double active_alarm_blink_hz;
     double neighbor_alarm_blink_hz;
 };
