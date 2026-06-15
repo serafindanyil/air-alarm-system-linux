@@ -4,7 +4,8 @@
 #include <iostream>
 #include <thread>
 
-Application::Application(const Config& config, const Api& api) : config_(config), api_(api) {}
+Application::Application(const Config& config, Gpio& gpio, Api& api)
+    : config_(config), gpio_(gpio), api_(api) {}
 
 int Application::run() {
     std::cout << "Air Alarm Service started" << std::endl;
