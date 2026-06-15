@@ -20,6 +20,7 @@ add_executable(
     src/region_list/region_list.cpp
     src/api/api.cpp
     src/gpio/gpio.cpp
+    src/led_controller/led_controller.cpp
 )
 
 target_link_libraries(
