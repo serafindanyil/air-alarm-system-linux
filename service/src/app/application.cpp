@@ -65,6 +65,7 @@ void Application::changeState(AppState next_state) {
             logger.print("Launching Air Alarm Service...");
             break;
         case AppState::NO_INTERNET:
+            led_controller_.active();
             info_logger.print("No internet connection");
             break;
         case AppState::BROKEN_API:
