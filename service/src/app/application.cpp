@@ -6,14 +6,17 @@
 
 Logging logger("APPLICATION");
 Logging info_logger("INFO");
-Logging runtime_error_logger("RUNTIME_ERROR");
 Logging led_logger("LED");
 
-Application::Application(Config& config, LedController& led_controller, Api& api)
-    : config_(config), led_controller_(led_controller), api_(api) {}
+Application::Application(Config& config, LedController& led_controller, Api& api,
+                         Logging& runtime_error_logger)
+    : config_(config),
+      led_controller_(led_controller),
+      api_(api),
+      runtime_error_logger_(runtime_error_logger) {}
 
 int Application::run() {
-    logger.print("Launching Air Alarm Service...");
+    changeState(AppState::STARTING);
 
     while (running_) {
         const AppState new_state = evaluateState();
@@ -23,7 +26,7 @@ int Application::run() {
         std::this_thread::sleep_for(std::chrono::seconds(config_.api.poll_interval_seconds));
     }
 
-    logger.print("Stopping Air Alarm Service...");
+    changeState(AppState::STOPPING);
 
     return 0;
 }
@@ -42,8 +45,8 @@ AppState Application::evaluateState() {
 
         return AppState::NO_ALERT;
     } catch (const std::exception& exception) {
-        runtime_error_logger.print("Runtime error occurred: " + std::string(exception.what()));
-        return AppState::RUNTIME_ERROR;
+        runtime_error_logger_.print(std::string(exception.what()));
+        return AppState::STOPPING;
     }
 }
 
@@ -59,7 +62,8 @@ void Application::applyState(AppState new_state) {
 void Application::changeState(AppState next_state) {
     switch (next_state) {
         case AppState::STARTING:
-        case AppState::RUNTIME_ERROR:
+            logger.print("Launching Air Alarm Service...");
+            break;
         case AppState::NO_INTERNET:
             info_logger.print("No internet connection");
             break;
@@ -80,6 +84,7 @@ void Application::changeState(AppState next_state) {
             led_logger.print("Alert in neighboring regions");
             break;
         case AppState::STOPPING:
+            logger.print("Stopping Air Alarm Service...");
             break;
         default:
             break;
