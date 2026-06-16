@@ -63,7 +63,7 @@ void Application::changeState(AppState next_state) {
             led_controller_.disabled();
             break;
         case AppState::ALERT_CURRENT_REGION:
-            led_controller_.active();
+            led_controller_.blink(config_.led.active_alarm_blink_hz);
             break;
         case AppState::ALERT_NEIGHBORING_REGIONS:
             led_controller_.blink(config_.led.neighbor_alarm_blink_hz);
