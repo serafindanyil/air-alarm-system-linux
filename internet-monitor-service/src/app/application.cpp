@@ -1,17 +1,33 @@
 #include "application.hpp"
+#include "logging/logging.hpp"
 
 #include <chrono>
 #include <cstdlib>
 #include <thread>
 
-#include "logging/logging.hpp"
-
-Application::Application() = default;
-
 Logging logger("APPLICATION");
+
+Application::Application() {
+    setupDbus();
+}
+
+void Application::setupDbus() {
+    connection_ =
+        sdbus::createSystemBusConnection(sdbus::ServiceName{"org.airalarm.InternetMonitor"});
+
+    object_ = sdbus::createObject(*connection_, sdbus::ObjectPath{"/org/airalarm/InternetMonitor"});
+
+    object_
+        ->addVTable(sdbus::registerMethod("HasInternetConnection").implementedAs([this]() {
+            return hasInternetConnection();
+        }))
+        .forInterface(sdbus::InterfaceName{"org.airalarm.InternetMonitor"});
+}
 
 int Application::run() {
     logger.print("Starting Internet Monitor...");
+
+    connection_->enterEventLoopAsync();
 
     while (running_) {
         has_internet_connection_ = checkInternetConnection();
@@ -22,8 +38,10 @@ int Application::run() {
             logger.print("Internet connection is unavailable");
         }
 
-        std::this_thread::sleep_for(std::chrono::seconds(ping_poll_interval_seconds_));
+        std::this_thread::sleep_for(std::chrono::seconds(PING_POLL_INTERVAL_SECONDS));
     }
+
+    connection_->leaveEventLoop();
 
     logger.print("Stopping Internet Monitor...");
 
