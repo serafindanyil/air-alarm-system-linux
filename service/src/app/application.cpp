@@ -1,14 +1,19 @@
 #include "application.hpp"
+#include "logging/logging.hpp"
 
 #include <chrono>
-#include <iostream>
 #include <thread>
+
+Logging logger("APPLICATION");
+Logging info_logger("INFO");
+Logging runtime_error_logger("RUNTIME_ERROR");
+Logging led_logger("LED");
 
 Application::Application(Config& config, LedController& led_controller, Api& api)
     : config_(config), led_controller_(led_controller), api_(api) {}
 
 int Application::run() {
-    std::cout << "[Air Alarm Service] Launching Air Alarm Service..." << std::endl;
+    logger.print("Launching Air Alarm Service...");
 
     while (running_) {
         const AppState new_state = evaluateState();
@@ -18,7 +23,7 @@ int Application::run() {
         std::this_thread::sleep_for(std::chrono::seconds(config_.api.poll_interval_seconds));
     }
 
-    std::cout << "[Air Alarm Service] Stopping Air Alarm Service..." << std::endl;
+    logger.print("Stopping Air Alarm Service...");
 
     return 0;
 }
@@ -37,7 +42,7 @@ AppState Application::evaluateState() {
 
         return AppState::NO_ALERT;
     } catch (const std::exception& exception) {
-        std::cerr << "[Air Alarm Service][RUNTIME_ERROR]: " << exception.what() << '\n';
+        runtime_error_logger.print("Runtime error occurred: " + std::string(exception.what()));
         return AppState::RUNTIME_ERROR;
     }
 }
@@ -56,17 +61,23 @@ void Application::changeState(AppState next_state) {
         case AppState::STARTING:
         case AppState::RUNTIME_ERROR:
         case AppState::NO_INTERNET:
+            info_logger.print("No internet connection");
+            break;
         case AppState::BROKEN_API:
             led_controller_.active();
+            led_logger.print("API is not working");
             break;
         case AppState::NO_ALERT:
             led_controller_.disabled();
+            led_logger.print("No alerts");
             break;
         case AppState::ALERT_CURRENT_REGION:
             led_controller_.blink(config_.led.active_alarm_blink_hz);
+            led_logger.print("Alert in current region");
             break;
         case AppState::ALERT_NEIGHBORING_REGIONS:
             led_controller_.blink(config_.led.neighbor_alarm_blink_hz);
+            led_logger.print("Alert in neighboring regions");
             break;
         case AppState::STOPPING:
             break;

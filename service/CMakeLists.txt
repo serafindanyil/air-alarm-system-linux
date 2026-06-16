@@ -21,6 +21,7 @@ add_executable(
     src/api/api.cpp
     src/gpio/gpio.cpp
     src/led_controller/led_controller.cpp
+    src/logging/logging.cpp
 )
 
 target_link_libraries(
