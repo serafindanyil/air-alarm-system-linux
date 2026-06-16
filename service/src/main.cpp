@@ -20,7 +20,7 @@ void signal_handler(int) {
 
 int main() {
     try {
-        Config config = ConfigLoader::load("config/air_alarm_config.json");
+        Config config = ConfigLoader::load("/etc/air-alarm-service/config.json");
 
         Gpio gpio = Gpio(config.led.gpio_chip_path, config.led.gpio_pin);
         LedController led_controller = LedController(gpio);
