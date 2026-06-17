@@ -14,6 +14,8 @@ Api::Api(const std::string& api_url, int current_region_id, const RegionList& re
 void Api::refresh() {
     const auto response = cpr::Get(cpr::Url{api_url_}, cpr::Timeout{3000});
 
+    status_code_ = response.status_code;
+
     if (response.error) {
         api_error_logger.print("Response error: " + response.error.message);
     }
@@ -32,6 +34,12 @@ void Api::refresh() {
 
     if (response.status_code == 500) {
         api_error_logger.print("Server error");
+    }
+
+    if (response.text.empty()) {
+        api_error_logger.print("Response body is empty");
+        status_code_ = 0;
+        return;
     }
 
     parseResponse(response.text);
@@ -73,4 +81,8 @@ void Api::parseResponse(const std::string& response) {
 
         alerts_[region_id] = it->at("alertnow").get<bool>();
     }
+}
+
+int Api::getStatusCode() const {
+    return status_code_;
 }
