@@ -1,12 +1,14 @@
 #include "application.hpp"
 #include "logging/logging.hpp"
+#include "network/internet_monitor.hpp"
 
-#include <chrono>
 #include <thread>
 
 Logging logger("APPLICATION");
 Logging info_logger("INFO");
 Logging led_logger("LED");
+
+InternetMonitor internet_monitor;
 
 Application::Application(Config& config, LedController& led_controller, Api& api,
                          Logging& runtime_error_logger)
@@ -26,13 +28,17 @@ int Application::run() {
         std::this_thread::sleep_for(std::chrono::seconds(config_.api.poll_interval_seconds));
     }
 
-    changeState(AppState::STOPPING);
+    applyState(AppState::STOPPING);
 
     return 0;
 }
 
 AppState Application::evaluateState() {
     try {
+        if (!internet_monitor.hasInternetConnection()) {
+            return AppState::NO_INTERNET;
+        }
+
         api_.refresh();
 
         if (api_.hasAlertCurrentRegion()) {
@@ -85,6 +91,7 @@ void Application::changeState(AppState next_state) {
             led_logger.print("Alert in neighboring regions");
             break;
         case AppState::STOPPING:
+            Application::stop();
             logger.print("Stopping Air Alarm Service...");
             break;
         default:
