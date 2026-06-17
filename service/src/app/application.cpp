@@ -41,6 +41,10 @@ AppState Application::evaluateState() {
 
         api_.refresh();
 
+        if (api_.getStatusCode() != 200) {
+            return AppState::BROKEN_API;
+        }
+
         if (api_.hasAlertCurrentRegion()) {
             return AppState::ALERT_CURRENT_REGION;
         }

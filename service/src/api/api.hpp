@@ -11,6 +11,8 @@ public:
 
     void refresh();
 
+    int getStatusCode() const;
+
     bool hasAlertCurrentRegion() const;
     bool hasAlertNeighboringRegions() const;
 
@@ -18,6 +20,8 @@ private:
     std::string api_url_;
     int current_region_id_;
     RegionList region_list_;
+
+    int status_code_{0};
 
     std::unordered_map<int, bool> alerts_;
 
