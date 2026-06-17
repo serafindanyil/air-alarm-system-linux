@@ -1,0 +1,4 @@
+source "$BR2_EXTERNAL_AIR_ALARM_SYSTEM_PATH/package/cpr/Config.in"
+source "$BR2_EXTERNAL_AIR_ALARM_SYSTEM_PATH/package/nlohmann-json/Config.in"
+source "$BR2_EXTERNAL_AIR_ALARM_SYSTEM_PATH/package/internet-monitor-service/Config.in"
+source "$BR2_EXTERNAL_AIR_ALARM_SYSTEM_PATH/package/air-alarm-service/Config.in"
