@@ -5,7 +5,7 @@ AIR_ALARM_SERVICE_SITE_METHOD = local
 AIR_ALARM_SERVICE_DEPENDENCIES = \
 	nlohmann-json \
 	cpr \
-	libgpiod \
+	libgpiod2 \
 	sdbus-cpp
 
 AIR_ALARM_SERVICE_INSTALL_STAGING = NO
