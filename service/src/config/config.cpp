@@ -1,17 +1,19 @@
 #include "config.hpp"
+#include <logging/logging.hpp>
 
 #include <fstream>
-#include <stdexcept>
 
 #include <nlohmann/json.hpp>
 
 using Json = nlohmann::json;
 
+Logging config_error_logger("CONFIG");
+
 Config ConfigLoader::load(const std::string& pathname) {
     std::ifstream file(pathname);
 
     if (!file.is_open()) {
-        throw std::runtime_error("Falied to open config: " + pathname);
+        config_error_logger.print("Failed to open config: " + pathname);
     }
 
     Json json;
@@ -40,30 +42,38 @@ Config ConfigLoader::load(const std::string& pathname) {
 }
 
 void ConfigLoader::validate(const Config& config) {
-    if (config.api.url.empty()) {
-        throw std::runtime_error("API URL is empty");
+    const auto& api = config.api;
+    const auto& region = config.region;
+    const auto& led = config.led;
+
+    if (api.url.empty()) {
+        config_error_logger.print("API URL is empty");
     }
 
-    if (config.api.poll_interval_seconds <= 0) {
-        throw std::runtime_error("Poll interval must be positive");
+    if (!api.url.starts_with("http://") && !api.url.starts_with("https://")) {
+        config_error_logger.print("API URL must start with http:// or https://");
     }
 
-    if (config.region.name.empty()) {
-        throw std::runtime_error("Region must not be empty");
+    if (api.poll_interval_seconds < 3) {
+        config_error_logger.print("Poll interval must be at least 3 seconds");
     }
 
-    if (config.led.gpio_pin < 0) {
-        throw std::runtime_error("Invalid GPIO");
+    if (region.name.empty()) {
+        config_error_logger.print("Region must not be empty");
     }
 
-    if (config.led.gpio_chip_path.empty()) {
-        throw std::runtime_error("GPIO chip path is empty");
+    if (led.gpio_pin < 0) {
+        config_error_logger.print("Invalid GPIO");
     }
 
-    if (config.led.active_alarm_blink_hz <= 0) {
-        throw std::runtime_error("Active alarm blink frequency must be positive");
+    if (led.gpio_chip_path.empty()) {
+        config_error_logger.print("GPIO chip path is empty");
     }
-    if (config.led.neighbor_alarm_blink_hz <= 0) {
-        throw std::runtime_error("Neighbor alarm blink frequency must be positive");
+
+    if (led.active_alarm_blink_hz <= 0) {
+        config_error_logger.print("Active alarm blink frequency must be positive");
+    }
+    if (led.neighbor_alarm_blink_hz <= 0) {
+        config_error_logger.print("Neighbor alarm blink frequency must be positive");
     }
 }
