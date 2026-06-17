@@ -1,11 +1,12 @@
 #include "api.hpp"
 
 #include <cpr/cpr.h>
+#include <logging/logging.hpp>
 #include <nlohmann/json.hpp>
 
-#include <stdexcept>
-
 using Json = nlohmann::json;
+
+Logging api_error_logger("API");
 
 Api::Api(const std::string& api_url, int current_region_id, const RegionList& region_list)
     : api_url_(api_url), current_region_id_(current_region_id), region_list_(region_list) {}
@@ -14,12 +15,23 @@ void Api::refresh() {
     const auto response = cpr::Get(cpr::Url{api_url_}, cpr::Timeout{3000});
 
     if (response.error) {
-        throw std::runtime_error("API request failed: " + response.error.message);
+        api_error_logger.print("Response error: " + response.error.message);
     }
 
     if (response.status_code != 200) {
-        throw std::runtime_error("API returned status code: " +
-                                 std::to_string(response.status_code));
+        api_error_logger.print("Status code: " + std::to_string(response.status_code));
+    }
+
+    if (response.status_code == 400) {
+        api_error_logger.print("Bad request");
+    }
+
+    if (response.status_code == 404) {
+        api_error_logger.print("Resource not found");
+    }
+
+    if (response.status_code == 500) {
+        api_error_logger.print("Server error");
     }
 
     parseResponse(response.text);

@@ -11,6 +11,7 @@ find_package(cpr REQUIRED)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GPIOD REQUIRED libgpiod)
+find_package(sdbus-c++ REQUIRED)
 
 add_executable(
     air-alarm-service
@@ -22,6 +23,7 @@ add_executable(
     src/gpio/gpio.cpp
     src/led_controller/led_controller.cpp
     src/logging/logging.cpp
+    src/network/internet_monitor.cpp
 )
 
 target_link_libraries(
@@ -30,13 +32,16 @@ target_link_libraries(
         nlohmann_json::nlohmann_json
         cpr::cpr
         ${GPIOD_LIBRARIES}
+        SDBusCpp::sdbus-c++
 )
+
 
 target_include_directories(
     air-alarm-service
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${GPIOD_LIBRARIES}
+        SDBusCpp::sdbus-c++
 
 )
 
