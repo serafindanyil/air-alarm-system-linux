@@ -19,8 +19,8 @@ define AIR_ALARM_SERVICE_INSTALL_TARGET_CMDS
 		$(TARGET_DIR)/usr/bin/air-alarm-config
 
 	$(INSTALL) -D -m 0755 \
-        $(BR2_EXTERNAL_AIR_ALARM_SYSTEM_PATH)/package/air-alarm-service/air-alarm-list \
-        $(TARGET_DIR)/usr/bin/air-alarm-list
+		$(BR2_EXTERNAL_AIR_ALARM_SYSTEM_PATH)/package/air-alarm-service/air-alarm-list \
+		$(TARGET_DIR)/usr/bin/air-alarm-list
 
 	$(INSTALL) -D -m 0644 \
 		$(BR2_EXTERNAL_AIR_ALARM_SYSTEM_PATH)/service/config/air_alarm_config.json \
