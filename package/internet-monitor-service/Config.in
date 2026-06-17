@@ -1,0 +1,6 @@
+config BR2_PACKAGE_INTERNET_MONITOR_SERVICE
+    bool "internet-monitor-service"
+    depends on BR2_INSTALL_LIBSTDCPP
+    select BR2_PACKAGE_SDBUS_CPP
+    help
+      Internet Monitor Service daemon with D-Bus.
