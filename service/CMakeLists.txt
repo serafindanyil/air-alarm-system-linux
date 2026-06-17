@@ -40,11 +40,8 @@ target_include_directories(
     air-alarm-service
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${GPIOD_LIBRARIES}
-        SDBusCpp::sdbus-c++
-
+        ${GPIOD_INCLUDE_DIRS}
 )
-
 target_compile_options(air-alarm-service
     PRIVATE
         -Wall
