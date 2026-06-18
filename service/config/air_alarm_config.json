@@ -1,15 +1,15 @@
 {
-  "api": {
-    "url": "https://ubilling.net.ua/aerialalerts/",
-    "poll_interval_seconds": 10
-  },
-  "region": {
-    "name": "Донецька область"
-  },
-  "led": {
-    "gpio_pin": 17,
-    "gpio_chip_path": "/dev/gpiochip0",
-    "active_alarm_blink_hz": 2,
-    "neighbor_alarm_blink_hz": 0.5
-  }
+    "api": {
+        "url": "https://ubilling.net.ua/aerialalerts/",
+        "poll_interval_seconds": 10
+    },
+    "region": {
+        "name": "Донецька область"
+    },
+    "led": {
+        "gpio_pin": 17,
+        "gpio_chip_path": "/dev/gpiochip0",
+        "active_alarm_blink_hz": 5,
+        "neighbor_alarm_blink_hz": 2
+    }
 }
