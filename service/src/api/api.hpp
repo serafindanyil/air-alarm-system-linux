@@ -9,7 +9,7 @@ class Api {
 public:
     Api(const std::string& api_url, int current_region_id, const RegionList& region_list);
 
-    void refresh();
+    bool refresh();
 
     int getStatusCode() const;
 

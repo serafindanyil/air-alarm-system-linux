@@ -11,7 +11,7 @@ Logging api_error_logger("API");
 Api::Api(const std::string& api_url, int current_region_id, const RegionList& region_list)
     : api_url_(api_url), current_region_id_(current_region_id), region_list_(region_list) {}
 
-void Api::refresh() {
+bool Api::refresh() {
     const auto response = cpr::Get(cpr::Url{api_url_}, cpr::Timeout{3000});
 
     status_code_ = response.status_code;
@@ -39,10 +39,11 @@ void Api::refresh() {
     if (response.text.empty()) {
         api_error_logger.print("Response body is empty");
         status_code_ = 0;
-        return;
+        return false;
     }
 
     parseResponse(response.text);
+    return true;
 }
 
 bool Api::hasAlertCurrentRegion() const {
