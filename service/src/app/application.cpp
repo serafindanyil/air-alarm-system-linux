@@ -39,9 +39,7 @@ AppState Application::evaluateState() {
             return AppState::NO_INTERNET;
         }
 
-        api_.refresh();
-
-        if (api_.getStatusCode() != 200) {
+        if (!api_.refresh()) {
             return AppState::BROKEN_API;
         }
 
