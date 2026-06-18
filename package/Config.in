@@ -1,0 +1,9 @@
+config BR2_PACKAGE_AIR_ALARM_SERVICE
+    bool "air-alarm-service"
+    depends on BR2_INSTALL_LIBSTDCPP
+    select BR2_PACKAGE_NLOHMANN_JSON
+    select BR2_PACKAGE_CPR
+    select BR2_PACKAGE_LIBGPIOD
+    select BR2_PACKAGE_SDBUS_CPP
+    help
+      Air Alarm Service.

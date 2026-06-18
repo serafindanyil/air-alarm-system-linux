@@ -1,0 +1,3 @@
+#!/bin/sh
+
+less /etc/air-alarm-service/regions_adjacency_list.json

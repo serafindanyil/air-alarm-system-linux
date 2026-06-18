@@ -1,0 +1,14 @@
+[Unit]
+Description=Internet Monitor Service
+After=network-online.target dbus.service
+Wants=network-online.target
+Requires=dbus.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/internet-monitor-service
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

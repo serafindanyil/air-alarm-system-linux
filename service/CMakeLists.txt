@@ -9,8 +9,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(nlohmann_json 3 REQUIRED)
 find_package(cpr REQUIRED)
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GPIOD REQUIRED libgpiod)
 find_package(sdbus-c++ REQUIRED)
 
 add_executable(
@@ -31,7 +29,7 @@ target_link_libraries(
     PRIVATE
         nlohmann_json::nlohmann_json
         cpr::cpr
-        ${GPIOD_LIBRARIES}
+        gpiod
         SDBusCpp::sdbus-c++
 )
 
@@ -40,9 +38,6 @@ target_include_directories(
     air-alarm-service
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${GPIOD_LIBRARIES}
-        SDBusCpp::sdbus-c++
-
 )
 
 target_compile_options(air-alarm-service

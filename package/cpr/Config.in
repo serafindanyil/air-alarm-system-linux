@@ -1,0 +1,6 @@
+config BR2_PACKAGE_CPR
+    bool "cpr"
+    depends on BR2_INSTALL_LIBSTDCPP
+    select BR2_PACKAGE_LIBCURL
+    help
+      C++ Requests library.

@@ -25,7 +25,8 @@ int main() {
         Gpio gpio = Gpio(config.led.gpio_chip_path, config.led.gpio_pin);
         LedController led_controller = LedController(gpio);
 
-        RegionList region_list = RegionListLoader::load("config/regions_adjacency_list.json");
+        RegionList region_list =
+            RegionListLoader::load("/etc/air-alarm-service/regions_adjacency_list.json");
 
         const int region_id = RegionListLoader::getRegionId(region_list, config.region.name);
 

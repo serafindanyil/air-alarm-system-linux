@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec nano /etc/air-alarm-service/config.json
