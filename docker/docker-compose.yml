@@ -1,0 +1,35 @@
+services:
+  buildroot:
+    build:
+      context: ..
+      dockerfile: docker/dockerfile
+
+    working_dir: /workspace
+
+    volumes:
+      - ..:/workspace/air-alarm-system-linux
+
+    command:
+      - /bin/bash
+      - -lc
+      - |
+          set -e
+
+          git clone --depth 1 --branch 2026.05-rc4 https://github.com/buildroot/buildroot.git /workspace/buildroot
+
+          cd /workspace/buildroot
+
+          make \
+            O=/workspace/buildroot-output \
+            BR2_EXTERNAL=/workspace/air-alarm-system-linux \
+            air_alarm_rpi4_64_defconfig
+
+          make \
+            O=/workspace/buildroot-output \
+            BR2_EXTERNAL=/workspace/air-alarm-system-linux \
+            -j$(nproc)
+
+          mkdir -p /workspace/air-alarm-system-linux/output/images
+
+          cp /workspace/buildroot-output/images/sdcard.img \
+             /workspace/air-alarm-system-linux/output/images/sdcard.img
